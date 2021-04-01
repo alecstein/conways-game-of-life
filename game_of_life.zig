@@ -84,7 +84,7 @@ fn Grid(comptime height: usize, comptime width: usize) type {
         pub fn printToScr(self: Self) void {
             std.debug.print("\x1B[2J\x1B[H", .{});
             for (self.grid) |row| {
-                // std.debug.print("\n", .{});
+                std.debug.print("\n", .{});
                 for (row) |cell| {
                     var v: []const u8 = undefined;
                     if (cell == 0) {
