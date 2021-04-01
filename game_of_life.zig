@@ -6,7 +6,7 @@ pub fn main() !void {
     grid.printToScr();
 
     while (true) {
-        std.time.sleep(30000000);
+        std.time.sleep(40000000);
         grid.update();
         grid.printToScr();
     }
