@@ -20,7 +20,10 @@ fn Grid(comptime height: usize, comptime width: usize) type {
         grid: [height][width]u8,
 
         pub fn init() Self {
-            var rang = std.rand.DefaultPrng.init(0);
+            var buf: [8]u8 = undefined;
+            std.crypto.randomBytes(buf[0..]) catch unreachable;
+            const seed = std.mem.readIntSliceLittle(u64, buf[0..8]);
+            var rang = std.rand.DefaultPrng.init(seed);
             var grid: [height][width]u8 = undefined;
             for (grid) |row, i| {
                 for (row) |cell, j| {
