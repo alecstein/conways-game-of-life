@@ -3,12 +3,13 @@ const std = @import("std");
 pub fn main() !void {
 
     var grid = Grid(40, 140).init();
-    grid.printToScr();
+
 
     while (true) {
         std.time.sleep(40000000);
-        grid.update();
+
         grid.printToScr();
+        grid.update();
     }
 }
 
