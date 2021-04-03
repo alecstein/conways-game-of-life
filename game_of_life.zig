@@ -79,6 +79,9 @@ fn Grid(comptime height: usize, comptime width: usize) type {
                     var alive_neighbors: u8 = 0;
 
                     // sum the cells around (and including) the cell in question
+                    // instead of summing all 8 neighbors of a cell (laterals, verticals,
+                    // and diagonals) it just sums a 3x3 block including the main cell.
+                    // then we subtract off the value of that main cell in the next step.
 
                     const delt = [3]usize{ 0, 1, 2 };
                     for (delt) |x| {
@@ -86,33 +89,64 @@ fn Grid(comptime height: usize, comptime width: usize) type {
                             alive_neighbors += self.grid[i + x - 1][j + y - 1];
                         }
                     }
+
                     // subtract the extra value in the center
 
                     alive_neighbors -= self.grid[i][j];
 
                     // Conway's rules
-                    // any live cell with fewer than two live neighbours dies, as if by underpopulation.
-                    // any live cell with two or three live neighbours lives on to the next generation.
-                    // any live cell with more than three live neighbours dies, as if by overpopulation.
-                    // any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-
                     // note: this is not the optimal way of doing the calculation
-
+                    
                     if (self.grid[i][j] == 1) {
+
+                        // any live cell with fewer than two live neighbours dies, as if by underpopulation.
+
                         if (alive_neighbors < 2) {
                             new_grid[i][j] = 0;
-                        } else if (alive_neighbors == 2 or alive_neighbors == 3) {
+                        } 
+                        
+                        // any live cell with two or three live neighbours lives on to the next generation.
+
+                        else if (alive_neighbors == 2 or alive_neighbors == 3) {
                             new_grid[i][j] = 1;
-                        } else {
+                        } 
+
+                        // any live cell with more than three live neighbours dies, as if by overpopulation.
+
+                        else {
                             new_grid[i][j] = 0;
                         }
-                    } else {
+                    } 
+
+                    else {
+
+                        // any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+
                         if (alive_neighbors == 3) {
                             new_grid[i][j] = 1;
-                        } else {
+                        } 
+                        
+                        else {
                             new_grid[i][j] = 0;
                         }
                     }
+
+                    // from a reddit comment:
+
+                    // any cell with three alive neighbors gets turned on
+                    // otherwise if grid[i][j] == 1 and neighbors != 2, you turn it off.
+                    // this code runs a little faster and is a little cleaner.
+
+                    // if (alive_neighbors == 3) {
+                    //     new_grid[i][j] = 1;
+                    // }
+                    // else if (self.grid[i][j] == 1 and alive_neighbors != 2) {
+                    //     new_grid[i][j] = 0;
+                    // }
+                    // else {
+                    //     new_grid[i][j] = self.grid[i][j];
+                    // }
+
                 }
             }
             self.grid = new_grid;
