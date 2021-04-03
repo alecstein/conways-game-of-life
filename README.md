@@ -12,10 +12,16 @@ If you want to compile `game_of_life` yourself, you need to have `zig` installed
 $ brew install zig
 ```
 
-Then to build, open the terminal and type
+The easiest way to run is by doing
 
 ```
 $ zig run game_of_life.zig
+```
+
+but you can also build an exe by doing:
+
+```
+$ zig build-exe game_of_life.zig 
 ```
 
 Each time the program starts with a new random seed, so you'll get a new graph every time. 
